@@ -4,42 +4,28 @@
       type="text"  
       class="todo-input" 
       placeholder="New Todo" 
-      v-model="newTodo"
+      v-model="newTodoTitle"
       @keyup.enter="addTodo"
     >
 
-      <div 
-        v-for="(todo, index) in todosFiltered" 
-        :key="index" 
-        class="todo-item"
-      >
-        <div class="todo-item-left">
-          <input class="todo-complete" type="checkbox" v-model="todo.completed">
-          <div 
-            v-if="!todo.editing" 
-            class="todo-item-title" 
-            :class="{'todo-completed': todo.completed}"
-          >
-            {{todo.title}}
-          </div>
-          <input 
-            v-else 
-            class="todo-item-edit" 
-            type="text" 
-            v-model="todo.title" 
-            @keyup.enter="doneEdit(index, todo)"
-            @keyup.esc="cancelEdit(index, todo)"
-          >
-        </div>
-        <div class="todo-item-right">
-          <i class="fas fa-pen todo-item-icon" @click="editTodo(index, todo)"></i>
-          <i class="fas fa-times todo-item-icon"  @click="removeTodo(index)"></i>
-        </div>
-      </div>
+    <todo-item 
+      v-for="(todo, index) in todosFiltered" 
+      :key="index" 
+      :todo.sync="todo"
+      :index="index"
+      @doneEdit="doneEdit"
+      @removeTodo="removeTodo"
+    >
+    </todo-item>
           
     <div class="todo-modes">
       <div class="todo-check-all">
-        <input class="todo-complete" type="checkbox" :checked="noRemainingTodos" @change="toggleCheckAll($event)">
+        <input 
+          class="todo-complete" 
+          type="checkbox" 
+          :checked="noRemainingTodos" 
+          @change="toggleCheckAll($event)"
+        >
         <div>Check All</div>
       </div>
       <div>{{remainingTodos}} {{remainingTodos === 1 ? 'item' : 'items'}} left</div>
@@ -80,8 +66,7 @@ export default {
     return {
       selectedMode: 'all',
       todoModes: ['all', 'active', 'completed'],
-      newTodo: '',
-      cachedTitles: {},
+      newTodoTitle: '',
       todos: [
         {
           title: 'eat the cat',
@@ -123,41 +108,30 @@ export default {
   },
   methods: {
     addTodo (){
-      if(!this.newTodo.trim().length) return;
+      if(!this.newTodoTitle.trim().length) return;
       const todo = {
-        title: this.newTodo,
+        title: this.newTodoTitle,
         completed: false,
         editing: false
       }
-      // this.todos.push(todo); 
-      this.todos = [todo, ...this.todos];
-      this.newTodo = '';
-      this.newTodoId++;
+      // this.todos.push(todo);
+      this.todos.unshift(todo); 
+      this.newTodoTitle = '';
     },
     removeTodo(index){
       this.todos.splice(index, 1);
     },
-    editTodo(index, todo){
-      todo.editing = true;
-      this.cachedTitles[index] = todo.title;
-    },
-    doneEdit(index, todo){
-      if(!todo.title.trim().length){
-        todo.title = this.cachedTitles[index];
-      }
-      todo.editing = false;
-      delete this.cachedTitles[index];
-    },
-    cancelEdit(index, todo){
-      todo.title = this.cachedTitles[index];
-      delete this.cachedTitles[index];
-      todo.editing = false
+    doneEdit({index, todo}){
+      this.todos.splice(index, 1, todo)
     },
     toggleCheckAll(e){
-      this.todos.map(t => t.completed = e.target.checked);
+      this.todos = this.todos.map(t => ({...t, completed: e.target.checked}));
     },
     clearCompleted(){
       this.todos = this.todos.filter(t => !t.completed);
+    },
+    toggleComplete({index, completed}){
+      this.todos[index].completed = completed; 
     }
   }
 }
@@ -174,6 +148,7 @@ export default {
     margin-bottom: 1.6rem;
     font-family: inherit;
     border: 1px solid lightgrey;
+    color: inherit;
 
     &:focus {
       outline: none;
@@ -235,9 +210,10 @@ export default {
     cursor: pointer;
     margin-left: 1.6rem;
     font-size: 1.4rem;
+    color: lightslategray;
 
     &:hover {
-      color: #000;
+      color: #555;
       transform: scale(1.12);
       transition: all .3s ease-in-out;
       backface-visibility: hidden;
@@ -276,13 +252,17 @@ export default {
     margin-bottom: 1.4rem;
   }
 
+  .todo-modes:last-child{
+    padding-top: 2rem;
+  }
+
   button {
     cursor: pointer;
     font-family: inherit;
     color: inherit;
     font-size: 1.4rem;
     background-color: white;
-    padding: 0.2rem 1rem;
+    padding: 0.3rem 1.3rem;
     border: 1px solid lightgrey;
 
     &:hover {

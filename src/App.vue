@@ -51,7 +51,7 @@ body {
 
 .logo {
   display: block;
-  margin: 2rem auto;
+  margin: 4rem auto 2rem;
   height: 7.5rem;
 }
 
