@@ -5,7 +5,7 @@
       <div 
         v-if="!todoItem.editing" 
         class="todo-item-title" 
-        :class="{'todo-completed': todo.completed}"
+        :class="{'todo-item-completed': todo.completed}"
       >
         {{todoItem.title}}
       </div>
@@ -26,6 +26,9 @@
 </template>
 
 <script>
+
+import { dispatchEvent } from '../helpers';
+
 export default {
   name: 'todo-item',
   props: {
@@ -54,19 +57,77 @@ export default {
         return;
       }
       this.todoItem.editing = false;
-      this.$emit('doneEdit', {index: this.index, todo: this.todoItem});
+      dispatchEvent('doneEdit', {index: this.index, todo: this.todoItem});
     },
     cancelEdit(){
       this.todoItem.title = this.cachedTitle;
       this.todoItem.editing = false;
     },
     removeTodo(){
-      this.$emit('removeTodo', this.index);
-    }
+      dispatchEvent('removeTodo', this.index);
+    },
   }
 }
 </script>
 
-<style>
+<style lang="scss">
 
+  .todo-item {
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    word-break: break-all;
+
+    &-right, &-left {
+      display: flex;
+      align-items: center;
+    }
+
+    &-title {
+      padding: 1rem;
+      border: 1px solid white;
+      margin-left: 1.2rem;
+    }
+
+    &-edit {
+      font-size: inherit;
+      line-height: inherit;
+      font-family: inherit;
+      color: #2c3e50;
+      margin-left: 1.2rem;
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid #ccc;
+  
+      &:focus {
+        outline: none;
+      }
+    }
+
+    &-icon {
+      cursor: pointer;
+      margin-left: 1.6rem;
+      font-size: 1.4rem;
+      color: lightslategray;
+
+      &:hover {
+        color: #555;
+        transform: scale(1.12);
+        transition: all .3s ease-in-out;
+        backface-visibility: hidden;
+      }
+    }
+
+    &-completed {
+      color: grey;
+      text-decoration: line-through;
+    }
+  }
+
+  .fa-times {
+    font-size: 1.6rem;
+  }
+
+  
 </style>

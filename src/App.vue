@@ -51,9 +51,40 @@ body {
 
 .logo {
   display: block;
-  margin: 4rem auto 2rem;
+  margin: 4rem auto;
   height: 7.5rem;
+  cursor: pointer;
+
+  &:hover{
+    transition: all .5s ease;
+    transform: scale(1.1);
+  }
 }
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+  font-size: 1.4rem;
+  background-color: white;
+  padding: 0.3rem 1.3rem;
+  border: 1px solid lightgrey;
+
+  &:hover {
+    transition: all .2s;
+    background-color: #d4ebd0;
+    border: 1px solid #7dc97d;
+  }
+
+  &:not(:first-child){
+    margin-left: .5rem;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
 
 #nav {
   padding: 30px;
