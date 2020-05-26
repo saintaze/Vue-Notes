@@ -1,5 +1,9 @@
 <template>
-  <div class="note-item" :class="{'note-item-selected': selectedIndex === index}" @click="selectNote">
+  <div 
+    class="note-item" 
+    :class="{'note-item-selected': selectedIndex === index}" 
+    @click="selectNote"
+  >
     <div class="note-item-header">
       <h4>{{noteItem.name}}</h4>
       <div class="todo-item-right note-item-right">
@@ -7,7 +11,11 @@
         <i class="fas fa-times todo-item-icon" @click.stop="removeNote"></i>
       </div>
     </div>
-    <div class="note-item-todo" v-for="(todo, index) in noteItem.todos.slice(0,4)" :key="index">
+    <div 
+      class="note-item-todo" 
+      v-for="(todo, index) in noteItem.todos.slice(0,4)" 
+      :key="index"
+    >
       <i class="fas fa-chevron-circle-right"></i>
       {{todo.title}}
     </div>
@@ -17,7 +25,6 @@
 
 <script>
 
-import {Todo, Note} from '@/models';
 import { dispatchEvent } from '@/helpers';
 
 export default {
@@ -57,7 +64,7 @@ export default {
 <style lang="scss">
   .note-item {
     background-color: #f7f7f7;
-    padding: 1.3rem 2rem;
+    padding: 1.3rem 2.3rem;
     border: 1px solid lightgray;
     margin-bottom: 3rem;
     cursor: pointer;

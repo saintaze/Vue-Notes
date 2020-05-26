@@ -1,26 +1,31 @@
 <template>
   <div id="todo-list">
+
     <modal-dialog :showModal="false"/>
-    <div class="todo-item " :class="{'note-edit': !editNoteName}">
-    <div class="todo-item-left note-item-left"> 
-      <div 
-        v-if="!editNoteName" 
-        class="todo-item-title" 
-      >
-        <h4>{{note.name}}</h4>
+
+    <div 
+      class="todo-item " 
+      :class="{'note-edit': !editNoteName, 'no-border': !todosFiltered.length}"
+    >
+      <div class="todo-item-left note-item-left" > 
+        <div 
+          v-if="!editNoteName" 
+          class="todo-item-title note-title" 
+        >
+          <h4>{{note.name}}</h4>
+        </div>
+        <input 
+          v-else 
+          class="todo-item-edit" 
+          type="text" 
+          v-model="note.name" 
+          @keyup.enter="noteNameEdit"
+          @keyup.esc="cancelEdit"
+        >
       </div>
-      <input 
-        v-else 
-        class="todo-item-edit" 
-        type="text" 
-        v-model="note.name" 
-        @keyup.enter="doneEdit"
-        @keyup.esc="cancelEdit"
-      >
-    </div>
-    <div class="todo-item-right">
-      <i class="fas fa-pen todo-item-icon" @click="setEditNoteName"></i>
-    </div>
+      <div class="todo-item-right">
+        <i class="fas fa-pen todo-item-icon" @click="setEditNoteName"></i>
+      </div>
     </div>
 
 
@@ -143,7 +148,7 @@ export default {
       this.editNoteName = true;
       this.cachedName = this.note.name;
     },
-     doneEdit(){
+     noteNameEdit(){
       if(!this.note.name.trim().length){
         this.note.name = this.cachedName;
         return;
@@ -190,6 +195,19 @@ export default {
     min-height: 5.2rem;
   }
 
+  .note-title {
+    padding: 0;
+    margin: 0;
+
+    h4 {
+      font-size: 1.9rem;
+    }
+  }
+
+  .no-border{
+    border: none;
+  }
+
   .todo-modes {
     display: flex;
     align-items: center;
@@ -218,6 +236,9 @@ export default {
     &-enter, &-leave-to{
       opacity: 0;
     } 
+  }
+  h4 {
+    margin: 0
   }
 
 </style>
