@@ -18,7 +18,8 @@ const routes = [
   {
     path: '/notes/:id/edit',
     name: 'notes-edit',
-    component: NotesEdit
+    component: NotesEdit,
+    props: true
   }
 ]
 

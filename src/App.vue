@@ -2,7 +2,7 @@
   <div id="app" class="container">
     <div id="nav">
       <button><router-link to="/notes">Notes</router-link></button> |
-      <button><router-link to="/notes/21/edit">Notes Edit</router-link></button> 
+      <button><router-link to="/notes/:id/edit">Notes Edit</router-link></button> 
     </div>
     <img src="./assets/logo.png" alt="vue logo" class="logo">
     <router-view/>

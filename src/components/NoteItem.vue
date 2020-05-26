@@ -7,7 +7,7 @@
     <div class="note-item-header">
       <h4>{{noteItem.name}}</h4>
       <div class="todo-item-right note-item-right">
-        <i class="fas fa-pen todo-item-icon" ></i>
+        <i class="fas fa-pen todo-item-icon" @click.stop="editNote"></i>
         <i class="fas fa-times todo-item-icon" @click.stop="removeNote"></i>
       </div>
     </div>
@@ -46,14 +46,23 @@ export default {
   },
   methods: {
     removeNote(){
-      dispatchEvent('removeNote', this.index)
+      dispatchEvent('removeNote', this.index);
     },
     selectNote(){
-      dispatchEvent('selectedNote', this.index)
-
+      dispatchEvent('selectedNote', this.index);
+    },
+    editNote(){
+      // dispatchEvent('editNote', this.noteItem);
+      this.$router.push({
+        path: `notes/${this.index}/edit`, 
+        params: {
+          note: 'hello world'
+        }
+      });
     }
   },
   created(){
+    console.log(this.$router)
   },
   beforeDestroy(){
   }

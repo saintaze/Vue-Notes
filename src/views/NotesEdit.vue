@@ -1,6 +1,5 @@
 <template>
   <todo-list />
-
 </template>
 
 <script>
@@ -11,6 +10,9 @@ import { addListener, removeListener } from '@/helpers';
 export default {
   components: {
      TodoList 
+  },
+  props: {
+    note: String
   },
   methods: {
     setEditNote(note){
