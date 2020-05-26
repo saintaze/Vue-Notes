@@ -1,19 +1,24 @@
 <template>
   <input 
     type="text"  
-    class="todo-input" 
-    placeholder="New Todo" 
+    class="input-box" 
+    :placeholder="placeholder"
     v-model="inputValue"
     @keyup.enter="addItem"
+    
   >
 </template>
 
 <script>
 
-import { dispatchEvent } from '../helpers';
+import { dispatchEvent } from '@/helpers';
 
 export default {
   name: 'input-box',
+  props: {
+    placeholder: String,
+    eventName: String
+  },
   data(){
     return {
       inputValue: ''
@@ -21,7 +26,7 @@ export default {
   },
   methods: {
     addItem(){
-      dispatchEvent('addItem', this.inputValue);
+      dispatchEvent(this.eventName, this.inputValue);
       this.inputValue = '';
     }
   }
@@ -29,7 +34,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .todo-input {
+  .input-box {
     width: 100%;
     padding: 1.4rem 1.8rem;
     font-size: 1.8rem;

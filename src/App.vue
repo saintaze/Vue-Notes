@@ -1,19 +1,16 @@
 <template>
-  <!-- <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div> -->
   <div id="app" class="container">
+    <div id="nav">
+      <button><router-link to="/notes">Notes</router-link></button> |
+      <button><router-link to="/notes/21/edit">Notes Edit</router-link></button> 
+    </div>
     <img src="./assets/logo.png" alt="vue logo" class="logo">
-    <todo-list/>
+    <router-view/>
   </div>
 </template>
 
 <script>
-import TodoList from './components/TodoList'
+import TodoList from '@/components/TodoList'
 
 export default {
   name: 'app',
@@ -27,6 +24,7 @@ export default {
 
 // Montserrat Font
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
 
 * {
   box-sizing: border-box;
@@ -42,6 +40,7 @@ body {
   line-height: 1.6;
   font-weight: normal;
   font-size: 1.8rem;
+  padding-bottom: 4rem;
 }
 
 .container {
@@ -67,7 +66,7 @@ button {
   color: inherit;
   font-size: 1.4rem;
   background-color: white;
-  padding: 0.3rem 1.3rem;
+  padding: 0.3rem 1.5rem;
   border: 1px solid lightgrey;
 
   &:hover {
@@ -77,7 +76,7 @@ button {
   }
 
   &:not(:first-child){
-    margin-left: .5rem;
+    margin-left: .7rem;
   }
 
   &:focus {

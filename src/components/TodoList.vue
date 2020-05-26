@@ -1,12 +1,33 @@
 <template>
   <div id="todo-list">
-    <modal-dialog :showModal="true"/>
-    <input-box />
+    <modal-dialog :showModal="false"/>
+    <div class="todo-item " :class="{'note-edit': !editNoteName}">
+    <div class="todo-item-left note-item-left"> 
+      <div 
+        v-if="!editNoteName" 
+        class="todo-item-title" 
+      >
+        <h4>{{note.name}}</h4>
+      </div>
+      <input 
+        v-else 
+        class="todo-item-edit" 
+        type="text" 
+        v-model="note.name" 
+        @keyup.enter="doneEdit"
+        @keyup.esc="cancelEdit"
+      >
+    </div>
+    <div class="todo-item-right">
+      <i class="fas fa-pen todo-item-icon" @click="setEditNoteName"></i>
+    </div>
+    </div>
+
 
     <todo-item 
       v-for="(todo, index) in todosFiltered" 
       :key="index" 
-      :todo.sync="todo"
+      :todo="todo"
       :index="index"
     />
 
@@ -27,15 +48,15 @@
 
 <script>
 
-import TodoItem from './TodoItem';
-import TodoItemsRemaining from './TodoItemsRemaining';
-import TodoCheckAll from './TodoCheckAll';
-import TodoModes from './TodoModes';
-import TodoClearCompleted from './TodoClearCompleted';
-import InputBox from './InputBox';
-import ModalDialog from './ModalDialog';
+import TodoItem from '@/components/TodoItem';
+import TodoItemsRemaining from '@/components/TodoItemsRemaining';
+import TodoCheckAll from '@/components/TodoCheckAll';
+import TodoModes from '@/components/TodoModes';
+import TodoClearCompleted from '@/components/TodoClearCompleted';
+import InputBox from '@/components/InputBox';
+import ModalDialog from '@/components/ModalDialog';
 
-import { addListener, removeListener } from '../helpers';
+import { addListener, removeListener } from '@/helpers';
 
 export default {
   name: 'todo-list',
@@ -51,39 +72,38 @@ export default {
   data (){
     return {
       selectedMode: 'all',
-      todos: [
-        {
-          title: 'eat the cat',
-          completed: true,
-          editing: false
-        },
-        {
-          title: 'Talk to tania',
-          completed: false,
-          editing: false
-        }
-      ]
+      editNote: null,
+      editNoteName: false,
+      cachedName: '',
+      note: {
+        name: 'Groceries',
+        todos: [
+          {title: 'buy mangoes', completed: false, editing: false},
+          {title: 'get red chilli powder', completed: false, editing: false},
+          {title: '3 breads 2 apples 8 oranges', completed: false, editing: false}
+        ]
+      }
     }
   },
   
   computed: {
     remainingTodos(){
-      return this.todos.filter(t => !t.completed).length;
+      return this.note.todos.filter(t => !t.completed).length;
     },
     noRemainingTodos(){
       return this.remainingTodos === 0;
     },
     todosFiltered(){
       if(this.selectedMode === 'active'){
-        return this.todos.filter(t => !t.completed);
+        return this.note.todos.filter(t => !t.completed);
       }else if(this.selectedMode === 'completed'){
-        return this.todos.filter(t => t.completed);
+        return this.note.todos.filter(t => t.completed);
       }else{
-        return this.todos;
+        return this.note.todos;
       }
     },
     showClearCompletedButton(){
-      return this.todos.filter(t => t.completed).length > 0
+      return this.note.todos.filter(t => t.completed).length > 0
     }
   },
   methods: {
@@ -94,35 +114,55 @@ export default {
         completed: false,
         editing: false
       }
-      this.todos.unshift(todo); 
-      // this.todos.push(todo)
+      this.note.todos.unshift(todo); 
+      // this.note.todos.push(todo)
     },
     removeTodo(index){
-      this.todos.splice(index, 1);
+      this.note.todos.splice(index, 1);
     },
     doneEdit({index, todo}){
-      this.todos.splice(index, 1, todo)
+      this.note.todos.splice(index, 1, todo)
     },
     toggleCheckAll(checkAll){ 
-      this.todos = this.todos.map(t => ({...t, completed: checkAll}));
+      this.note.todos = this.note.todos.map(t => ({...t, completed: checkAll}));
     },
     clearCompleted(){
-      this.todos = this.todos.filter(t => !t.completed);
+      this.note.todos = this.note.todos.filter(t => !t.completed);
     },
     toggleComplete({index, completed}){
-      this.todos[index].completed = completed; 
+      this.note.todos[index].completed = completed; 
     },
     setTodosMode(mode){
       this.selectedMode = mode;
-    }
+    },
+    setEditNote(note){
+      console.log(note)
+      this.editNote = note;
+    },
+     setEditNoteName(){
+      this.editNoteName = true;
+      this.cachedName = this.note.name;
+    },
+     doneEdit(){
+      if(!this.note.name.trim().length){
+        this.note.name = this.cachedName;
+        return;
+      }
+      this.editNoteName = false;
+    },
+    cancelEdit(){
+      this.note.name = this.cachedName;
+      this.editNoteName = false;
+    },
   },
   created(){
     addListener('doneEdit', this.doneEdit);
-    addListener('addItem', this.addTodo)
+    addListener('addTodo', this.addTodo);
     addListener('removeTodo', this.removeTodo);
     addListener('toggleCheckAll', this.toggleCheckAll);
     addListener('selectedMode', this.setTodosMode);
     addListener('clearCompleted', this.clearCompleted);
+    addListener('editNote', this.setEditNote);
   },
   beforeDestroy(){
     removeListener('doneEdit', this.doneEdit);
@@ -130,7 +170,9 @@ export default {
     removeListener('toggleCheckAll', this.toggleCheckAll);
     removeListener('selectedMode', this.setTodosMode);
     removeListener('clearCompleted', this.clearCompleted);
-    removeListener('addItem', this.addTodo);
+    removeListener('addTodo', this.addTodo);
+    removeListener('editNote', this.setEditNote);
+
   }
 }
 </script>
@@ -139,6 +181,14 @@ export default {
 // STYLES
 
 <style lang="scss">
+
+  .note-edit{
+    border-bottom: 1px solid lightgrey;
+  }
+
+  .note-item-left{
+    min-height: 5.2rem;
+  }
 
   .todo-modes {
     display: flex;

@@ -27,7 +27,7 @@
 
 <script>
 
-import { dispatchEvent } from '../helpers';
+import { dispatchEvent } from '@/helpers';
 
 export default {
   name: 'todo-item',
@@ -73,7 +73,8 @@ export default {
 <style lang="scss">
 
   .todo-item {
-    margin-bottom: 1.2rem;
+    font-size: 1.7rem;
+    margin-bottom: .5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -84,10 +85,14 @@ export default {
       align-items: center;
     }
 
+    &-left {
+      flex-grow: .98
+    }
+
     &-title {
       padding: 1rem;
       border: 1px solid white;
-      margin-left: 1.2rem;
+      margin-left: .7rem;
     }
 
     &-edit {

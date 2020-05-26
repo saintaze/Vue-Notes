@@ -6,7 +6,7 @@
 
 <script>
 
-import { dispatchEvent } from '../helpers';
+import { dispatchEvent } from '@/helpers';
 
 export default {
   name: 'todo-clear-completed',
