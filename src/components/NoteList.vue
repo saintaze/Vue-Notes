@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input-box :placeholder="'New Todo'" :eventName="'addNote'"/>
+    <input-box :placeholder="'New Note'" :eventName="'addNote'"/>
     <transition name="fade">
       <input-box 
         v-if="selectedIndex !== null"
@@ -33,63 +33,14 @@ export default {
     InputBox,
     NoteItem
   },
-  data(){
-    return {    
-      selectedIndex: null,
-      notes: [
-        {
-          name: 'Groceries',
-          todos: [
-            {title: 'buy mangoes', completed: false, editing: false},
-            {title: 'get red chilli powder', completed: false, editing: false},
-            {title: '3 breads 2 apples 8 oranges', completed: false, editing: false}
-          ]
-        },
-        {
-          name: 'Boxing',
-          todos: [
-            {title: 'train for boxing', completed: false, editing: false},
-            {title: 'strengthen muscles in the arms', completed: false, editing: false},
-            {title: 'climb 3 flights fo stairs', completed: false, editing: false},{title: 'strengthen muscles in the armswj jejwj jewje jewjejw ejwjewj ejwekjwj', completed: false, editing: false},
-            {title: 'climb 3 flights fo stairs', completed: false, editing: false},
-            {title: 'strengthen muscles in the arms', completed: false, editing: false},
-          ]
-        }
-      ]
+  computed: {
+    selectedIndex(){
+      return this.$store.getters.selectedIndex;
+    },
+    notes(){
+      return this.$store.getters.notes;
     }
-  },
-  methods: {
-    removeNote(index){
-      if(this.selectedIndex === index) this.selectedIndex = null;
-      this.notes.splice(index, 1);
-    },
-    addNote(newNoteName){
-      if(!newNoteName.trim().length) return;
-      this.notes.unshift(new Note(newNoteName));
-      this.selectedIndex = 0;
-    },
-    addTodo(newTodoTitle){
-      if(!newTodoTitle.trim().length) return;
-      const newTodo = new Todo(newTodoTitle);
-      this.notes[this.selectedIndex].todos.unshift(newTodo);
-    },
-    selectedNote(index){
-      this.selectedIndex = index
-    }
-  },
-  created(){
-    addListener('removeNote', this.removeNote);
-    addListener('selectedNote', this.selectedNote);
-    addListener('addNote', this.addNote);
-    addListener('addTodo', this.addTodo);
-  },
-  beforeDestroy(){
-    removeListener('removeNote', this.removeNote);
-    removeListener('selectedNote', this.selectedNote);
-    removeListener('addNote', this.addNote);
-    removeListener('addTodo', this.addTodo);
   }
-
 }
 </script>
 

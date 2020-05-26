@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     addItem(){
-      dispatchEvent(this.eventName, this.inputValue);
+      this.$store.commit(this.eventName, this.inputValue)
       this.inputValue = '';
     }
   }

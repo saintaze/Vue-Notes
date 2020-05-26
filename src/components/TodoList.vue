@@ -222,12 +222,6 @@ export default {
     }
   }
 
-  .active {
-    transition: all .3s;
-    background-color: #cceabb;
-    border: 1px solid #20b2aab0;
-  }
-
   .fade {
     &-enter-active, &-leave-active {
       transition: opacity .2s;

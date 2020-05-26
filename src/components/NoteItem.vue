@@ -19,13 +19,13 @@
       <i class="fas fa-chevron-circle-right"></i>
       {{todo.title}}
     </div>
-    <i v-if="noteItem.todos.length > 4" class="fas fa-ellipsis-h"></i>
+    <transition name="fade">
+      <i v-if="noteItem.todos.length > 4" class="fas fa-ellipsis-h"></i>
+    </transition>
   </div>
 </template>
 
 <script>
-
-import { dispatchEvent } from '@/helpers';
 
 export default {
   name: 'note-item',
@@ -46,25 +46,14 @@ export default {
   },
   methods: {
     removeNote(){
-      dispatchEvent('removeNote', this.index);
+      this.$store.commit('removeNote', this.index);
     },
     selectNote(){
-      dispatchEvent('selectedNote', this.index);
+      this.$store.commit('selectedNote', this.index);
     },
     editNote(){
-      // dispatchEvent('editNote', this.noteItem);
-      this.$router.push({
-        path: `notes/${this.index}/edit`, 
-        params: {
-          note: 'hello world'
-        }
-      });
+      this.$router.push(`notes/${this.index}/edit`);
     }
-  },
-  created(){
-    console.log(this.$router)
-  },
-  beforeDestroy(){
   }
 
 }
@@ -73,7 +62,7 @@ export default {
 <style lang="scss">
   .note-item {
     background-color: #f7f7f7;
-    padding: 1.3rem 2.3rem;
+    padding: 1.3rem 2.1rem;
     border: 1px solid lightgray;
     margin-bottom: 3rem;
     cursor: pointer;
@@ -82,7 +71,7 @@ export default {
     word-break: break-all;
 
     &-selected{
-      border-left: 6px solid #41b883;
+      border-left: 7px solid #41b883;
       box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 
     }
@@ -121,7 +110,7 @@ export default {
   .fa-chevron-circle-right {
     color: #41b883;
     margin-right: .6rem;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
 
   .fa-ellipsis-h {

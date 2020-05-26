@@ -71,8 +71,8 @@ button {
 
   &:hover {
     transition: all .2s;
-    background-color: #d4ebd0;
-    border: 1px solid #7dc97d;
+    background-color: #d4ebd0c7;
+    border: 1px solid #99da99;
   }
 
   &:not(:first-child){
@@ -84,6 +84,16 @@ button {
   }
 }
 
+ .active {
+    transition: all .3s;
+    background-color: #41b883;
+    border: 1px solid #20b2aab0;
+    color: white;
+
+    &:hover {
+      background-color: #41b883;
+    }
+  }
 
 #nav {
   padding: 30px;

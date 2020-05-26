@@ -3,7 +3,6 @@
 </template>
 
 <script>
-
 import NoteList from '@/components/NoteList';
 
 export default {
@@ -12,7 +11,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>
