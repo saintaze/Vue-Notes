@@ -4,7 +4,7 @@
     <modal-dialog :showModal="false"/>
 
     <div 
-      class="todo-item " 
+      class="todo-item" 
       :class="{'note-edit': !editNoteName, 'no-border': !todosFiltered.length}"
     >
       <div class="todo-item-left note-item-left" > 
@@ -19,7 +19,7 @@
           class="todo-item-edit" 
           type="text" 
           v-model="note.name" 
-          @keyup.enter="noteNameEdit"
+          @keyup.enter="doneEdit"
           @keyup.esc="cancelEdit"
         >
       </div>
@@ -28,28 +28,26 @@
       </div>
     </div>
 
-
     <todo-item 
       v-for="(todo, index) in todosFiltered" 
       :key="index" 
       :todo="todo"
-      :index="index"
+      :todoIndex="index"
+      :noteIndex="noteIndex"
     />
 
     <div class="todo-modes">
-      <todo-check-all :noRemainingTodos="noRemainingTodos" />
-      <todo-items-remaining :remainingTodos="remainingTodos" />
+      <todo-check-all :noteIndex="noteIndex" :style="{visibility: toggleHideShowEl()}" />
+      <todo-items-remaining :noteIndex="noteIndex" />
     </div>
 
     <div class="todo-modes">
       <todo-modes />
-      <todo-clear-completed :showClearCompletedButton="showClearCompletedButton"/>
+      <todo-clear-completed :noteIndex="noteIndex" />
     </div>
 
   </div>
 </template>
-
-// JS
 
 <script>
 
@@ -58,10 +56,7 @@ import TodoItemsRemaining from '@/components/TodoItemsRemaining';
 import TodoCheckAll from '@/components/TodoCheckAll';
 import TodoModes from '@/components/TodoModes';
 import TodoClearCompleted from '@/components/TodoClearCompleted';
-import InputBox from '@/components/InputBox';
 import ModalDialog from '@/components/ModalDialog';
-
-import { addListener, removeListener } from '@/helpers';
 
 export default {
   name: 'todo-list',
@@ -71,119 +66,50 @@ export default {
     TodoItemsRemaining,
     TodoModes,
     TodoClearCompleted,
-    InputBox,
     ModalDialog
   },
   data (){
     return {
-      selectedMode: 'all',
-      editNote: null,
       editNoteName: false,
       cachedName: '',
-      note: {
-        name: 'Groceries',
-        todos: [
-          {title: 'buy mangoes', completed: false, editing: false},
-          {title: 'get red chilli powder', completed: false, editing: false},
-          {title: '3 breads 2 apples 8 oranges', completed: false, editing: false}
-        ]
-      }
+      noteIndex: +this.$route.params.id
     }
   },
-  
   computed: {
-    remainingTodos(){
-      return this.note.todos.filter(t => !t.completed).length;
-    },
-    noRemainingTodos(){
-      return this.remainingTodos === 0;
+    note(){
+      return this.$store.getters.note(this.noteIndex);
     },
     todosFiltered(){
-      if(this.selectedMode === 'active'){
-        return this.note.todos.filter(t => !t.completed);
-      }else if(this.selectedMode === 'completed'){
-        return this.note.todos.filter(t => t.completed);
-      }else{
-        return this.note.todos;
-      }
+      return this.$store.getters.todosFiltered(this.noteIndex);
     },
-    showClearCompletedButton(){
-      return this.note.todos.filter(t => t.completed).length > 0
+    selectedTodoMode(){
+      return this.$store.getters.selectedTodoMode;
     }
   },
   methods: {
-    addTodo(newTodoTitle){
-      if(!newTodoTitle.trim().length) return;
-      const todo = {
-        title: newTodoTitle,
-        completed: false,
-        editing: false
-      }
-      this.note.todos.unshift(todo); 
-      // this.note.todos.push(todo)
-    },
-    removeTodo(index){
-      this.note.todos.splice(index, 1);
-    },
-    doneEdit({index, todo}){
-      this.note.todos.splice(index, 1, todo)
-    },
-    toggleCheckAll(checkAll){ 
-      this.note.todos = this.note.todos.map(t => ({...t, completed: checkAll}));
-    },
-    clearCompleted(){
-      this.note.todos = this.note.todos.filter(t => !t.completed);
-    },
-    toggleComplete({index, completed}){
-      this.note.todos[index].completed = completed; 
-    },
-    setTodosMode(mode){
-      this.selectedMode = mode;
-    },
-    setEditNote(note){
-      console.log(note)
-      this.editNote = note;
-    },
      setEditNoteName(){
       this.editNoteName = true;
       this.cachedName = this.note.name;
     },
-     noteNameEdit(){
+     doneEdit(){
       if(!this.note.name.trim().length){
         this.note.name = this.cachedName;
         return;
       }
       this.editNoteName = false;
+      this.$store.commit('editNoteName', {index: this.noteIndex, name: this.note.name});
     },
     cancelEdit(){
       this.note.name = this.cachedName;
       this.editNoteName = false;
     },
-  },
-  created(){
-    addListener('doneEdit', this.doneEdit);
-    addListener('addTodo', this.addTodo);
-    addListener('removeTodo', this.removeTodo);
-    addListener('toggleCheckAll', this.toggleCheckAll);
-    addListener('selectedMode', this.setTodosMode);
-    addListener('clearCompleted', this.clearCompleted);
-    addListener('editNote', this.setEditNote);
-  },
-  beforeDestroy(){
-    removeListener('doneEdit', this.doneEdit);
-    removeListener('removeTodo', this.removeTodo);
-    removeListener('toggleCheckAll', this.toggleCheckAll);
-    removeListener('selectedMode', this.setTodosMode);
-    removeListener('clearCompleted', this.clearCompleted);
-    removeListener('addTodo', this.addTodo);
-    removeListener('editNote', this.setEditNote);
-
+    toggleHideShowEl(){
+      return this.selectedTodoMode === 'all' ? 'visible': 'hidden';
+    }
   }
 }
 </script>
 
-
-// STYLES
 
 <style lang="scss">
 
@@ -218,7 +144,7 @@ export default {
     margin-bottom: 1.4rem;
 
     &:last-child {
-      padding-top: 2rem;
+      padding-top: 2.5rem;
     }
   }
 

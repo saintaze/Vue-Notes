@@ -4,7 +4,7 @@
       class="todo-complete" 
       type="checkbox" 
       :checked="noRemainingTodos" 
-      @change="toggleCheckAll($event)"
+      @change="toggleCheckAllTodos($event)"
     >
     <div>Check All</div>
   </div>
@@ -12,23 +12,25 @@
 
 <script>
 
-import { dispatchEvent } from '@/helpers';
-
 export default {
   name:"todo-check-all",
   props:{
-    noRemainingTodos: Boolean
+    noteIndex: Number
   },
   methods: {
-    toggleCheckAll(e){
-      dispatchEvent('toggleCheckAll', e.target.checked);
+    toggleCheckAllTodos(e){
+      this.$store.commit('toggleCheckAllTodos', {index: this.noteIndex, checked: e.target.checked});
     }
+  },
+  computed: {
+    noRemainingTodos(){
+      return this.$store.getters.noRemainingTodos(this.noteIndex);
+    },
   }
 }
 </script>
 
 <style lang="scss">
-
   .todo-complete {
     cursor: pointer;
   }
@@ -42,3 +44,6 @@ export default {
     }
   }
 </style>
+
+
+

@@ -5,7 +5,7 @@
     :placeholder="placeholder"
     v-model="inputValue"
     @keyup.enter="addItem"
-    
+    autofocus
   >
 </template>
 
@@ -28,6 +28,7 @@ export default {
     addItem(){
       this.$store.commit(this.eventName, this.inputValue)
       this.inputValue = '';
+      this.$emit('focus');
     }
   }
 }

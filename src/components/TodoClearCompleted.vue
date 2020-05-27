@@ -1,26 +1,30 @@
 <template>
   <transition name="fade">
-    <button v-if="showClearCompletedButton" @click="clearCompleted">Clear Completed</button>
+    <button 
+      v-if="showClearCompletedButton" 
+      @click="clearCompleted"
+    >
+      Clear Completed
+    </button>
   </transition>
 </template>
 
 <script>
 
-import { dispatchEvent } from '@/helpers';
-
 export default {
   name: 'todo-clear-completed',
   props: {
-    showClearCompletedButton: Boolean
+    noteIndex: Number
   },
   methods: {
     clearCompleted(){
-      dispatchEvent('clearCompleted');
+      this.$store.commit('clearCompletedTodos', this.noteIndex);
+    },
+  },
+  computed: {
+    showClearCompletedButton(){
+      return this.$store.getters.showClearCompletedButton(this.noteIndex)
     }
   }
 }
 </script>
-
-<style>
-
-</style>

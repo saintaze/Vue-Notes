@@ -1,11 +1,17 @@
 <template>
   <div>
-    <input-box :placeholder="'New Note'" :eventName="'addNote'"/>
+    <input-box 
+      :placeholder="'New Note'" 
+      :eventName="'addNote'" 
+      @focus="focusAddTodoInput"
+    />
+    <h3 v-if="!notes.length">Add New Notes</h3>
     <transition name="fade">
       <input-box 
-        v-if="selectedIndex !== null"
+        v-show="selectedNoteIndex !== null"
         :placeholder="'New Todo'" 
         :eventName="'addTodo'"
+        ref="addTodoInput"
       />
     </transition>
     <div class="note-list">
@@ -14,7 +20,6 @@
         :key="index" 
         :index="index"
         :note="note"
-        :selectedIndex="selectedIndex"
       />
     </div>
   </div>
@@ -24,9 +29,6 @@
 import InputBox from '@/components/InputBox';
 import NoteItem from '@/components/NoteItem'
 
-import {Todo, Note} from '@/models';
-import { addListener, removeListener } from '@/helpers';
-
 export default {
   name: 'note-list',
   components: {
@@ -34,11 +36,16 @@ export default {
     NoteItem
   },
   computed: {
-    selectedIndex(){
-      return this.$store.getters.selectedIndex;
+    selectedNoteIndex(){
+      return this.$store.getters.selectedNoteIndex;
     },
     notes(){
       return this.$store.getters.notes;
+    }
+  },
+  methods: {
+    focusAddTodoInput(){
+      setTimeout(()=>{this.$refs.addTodoInput.$el.focus()}, 15);
     }
   }
 }

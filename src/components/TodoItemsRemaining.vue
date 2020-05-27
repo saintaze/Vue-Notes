@@ -6,11 +6,12 @@
 export default {
   name:"todo-items-remaining",
   props:{
-    remainingTodos: Number
+    noteIndex: Number
+  },
+  computed: {
+    remainingTodos(){
+      return this.$store.getters.remainingTodos(this.noteIndex);
+    }
   }
 }
 </script>
-
-<style>
-
-</style>

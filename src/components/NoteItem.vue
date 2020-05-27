@@ -1,7 +1,7 @@
 <template>
   <div 
     class="note-item" 
-    :class="{'note-item-selected': selectedIndex === index}" 
+    :class="{'note-item-selected': selectedNoteIndex === index}" 
     @click="selectNote"
   >
     <div class="note-item-header">
@@ -31,8 +31,7 @@ export default {
   name: 'note-item',
   props: {
     note: Object,
-    index: Number,
-    selectedIndex: Number
+    index: Number
   },
   data(){
     return {    
@@ -44,12 +43,17 @@ export default {
       this.noteItem = {...this.note}
     }
   },
+  computed: {
+    selectedNoteIndex(){
+      return this.$store.getters.selectedNoteIndex;
+    }
+  },
   methods: {
     removeNote(){
       this.$store.commit('removeNote', this.index);
     },
     selectNote(){
-      this.$store.commit('selectedNote', this.index);
+      this.$store.commit('setSelectedNote', this.index);
     },
     editNote(){
       this.$router.push(`notes/${this.index}/edit`);
@@ -71,13 +75,13 @@ export default {
     word-break: break-all;
 
     &-selected{
-      border-left: 7px solid #41b883;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-
+      border-left: 7px solid #47c98f;
+      transform: scale(1.02);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.24);
     }
 
     &:hover {
-      transform: scale(1.01);
+      transform: scale(1.02);
       box-shadow: 0 3px 6px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.24);
     }
 

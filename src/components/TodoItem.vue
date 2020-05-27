@@ -1,11 +1,17 @@
 <template>
   <div class="todo-item">
     <div class="todo-item-left">
-      <input class="todo-complete" type="checkbox" v-model="todoItem.completed" @change="doneEdit">
+      <input 
+        class="todo-complete"
+        type="checkbox" 
+        v-model="todoItem.completed" 
+        @change="doneEdit"
+        v-if="this.selectedTodoMode === 'all'"
+      >
       <div 
         v-if="!todoItem.editing" 
         class="todo-item-title" 
-        :class="{'todo-item-completed': todo.completed}"
+        :class="{'todo-item-completed': todoItem.completed, 'hide-control': this.selectedTodoMode !== 'all'}"
       >
         {{todoItem.title}}
       </div>
@@ -18,22 +24,21 @@
         @keyup.esc="cancelEdit"
       >
     </div>
-    <div class="todo-item-right">
+    <div class="todo-item-right" :style="{visibility: toggleHideShowEl()}">
       <i class="fas fa-pen todo-item-icon" @click="editTodo"></i>
-      <i class="fas fa-times todo-item-icon"  @click="removeTodo"></i>
+      <i class="fas fa-times todo-item-icon" @click="removeTodo"></i>
     </div>
   </div>
 </template>
 
 <script>
 
-import { dispatchEvent } from '@/helpers';
-
 export default {
   name: 'todo-item',
   props: {
     todo: Object,
-    index: Number
+    todoIndex: Number,
+    noteIndex: Number
   },
   data(){
     return {
@@ -44,6 +49,11 @@ export default {
   watch: {
     todo(){
       this.todoItem = {...this.todo}
+    }
+  },
+  computed: {
+    selectedTodoMode(){
+      return this.$store.getters.selectedTodoMode;
     }
   },
   methods: {
@@ -57,15 +67,22 @@ export default {
         return;
       }
       this.todoItem.editing = false;
-      dispatchEvent('doneEdit', {index: this.index, todo: this.todoItem});
+      this.$store.commit('editTodo', {
+        noteIndex: this.noteIndex, 
+        todoIndex: this.todoIndex, 
+        todo: this.todoItem
+      });
     },
     cancelEdit(){
       this.todoItem.title = this.cachedTitle;
       this.todoItem.editing = false;
     },
     removeTodo(){
-      dispatchEvent('removeTodo', this.index);
+      this.$store.commit('removeTodo', {noteIndex: this.noteIndex, todoIndex: this.todoIndex});
     },
+    toggleHideShowEl(){
+      return  this.selectedTodoMode === 'all' ? 'visible': 'hidden';
+    }
   }
 }
 </script>
@@ -118,7 +135,7 @@ export default {
 
       &:hover {
         color: #555;
-        transform: scale(1.12);
+        transform: scale(1.2);
         transition: all .3s ease-in-out;
         backface-visibility: hidden;
       }
@@ -134,5 +151,9 @@ export default {
     font-size: 1.6rem;
   }
 
-  
+  .hide-control{
+    padding-left: 0;
+    margin-left: 0;
+  }
+
 </style>

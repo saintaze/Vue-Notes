@@ -2,8 +2,8 @@
   <div>
     <button 
       v-for="mode in todoModes" 
-      :class="{active: selectedMode === mode}" 
       :key="mode" 
+      :class="{active: selectedTodoMode === mode}" 
       @click="modeSelected(mode)"
     >
       {{mode | capitalize}}
@@ -13,13 +13,10 @@
 
 <script>
 
-import { dispatchEvent } from '../helpers';
-
 export default {
   name: 'todo-modes',
   data(){
     return {
-      selectedMode: 'all',
       todoModes: ['all', 'active', 'completed'],
     }
   },
@@ -30,13 +27,14 @@ export default {
   },
   methods: {
     modeSelected(mode){
-      this.selectedMode = mode;
-      dispatchEvent('selectedMode', mode);
+      this.$store.commit('setSelectedTodoMode', mode);
+    }
+  },
+  computed: {
+    selectedTodoMode(){
+      return this.$store.getters.selectedTodoMode;
     }
   }
 }
 </script>
 
-<style>
-  
-</style>
