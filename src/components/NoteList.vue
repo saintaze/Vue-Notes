@@ -27,7 +27,7 @@
 
 <script>
 import InputBox from '@/components/InputBox';
-import NoteItem from '@/components/NoteItem'
+import NoteItem from '@/components/NoteItem';
 
 export default {
   name: 'note-list',

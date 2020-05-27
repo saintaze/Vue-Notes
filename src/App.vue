@@ -1,5 +1,6 @@
 <template>
   <div id="app" class="container">
+    <modal-dialog></modal-dialog>
     <div class="nav">
        <router-link to="/notes"><button>Notes</button> </router-link>
        <img src="./assets/logo.png" alt="vue logo" class="logo">
@@ -9,8 +10,13 @@
 </template>
 
 <script>
+import ModalDialog from '@/components/ModalDialog';
+
 export default {
-  name: 'app'
+  name: 'app',
+  components: {
+    ModalDialog
+  }
 }
 </script>
 

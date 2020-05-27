@@ -8,7 +8,7 @@
       <h4>{{noteItem.name}}</h4>
       <div class="todo-item-right note-item-right">
         <i class="fas fa-pen todo-item-icon" @click.stop="editNote"></i>
-        <i class="fas fa-times todo-item-icon" @click.stop="removeNote"></i>
+        <i class="fas fa-times todo-item-icon" @click.stop="openModal"></i>
       </div>
     </div>
     <div 
@@ -27,6 +27,7 @@
 
 <script>
 
+
 export default {
   name: 'note-item',
   props: {
@@ -41,27 +42,48 @@ export default {
   watch: {
     note(){
       this.noteItem = {...this.note}
+    },
+    modalAction(newVal, oldVal){
+      console.log(newVal, oldVal)
+      console.log(this.modalAction)
+      this.removeNote(this.index);
+      this.closeModal();
     }
   },
   computed: {
     selectedNoteIndex(){
       return this.$store.getters.selectedNoteIndex;
+    },
+    modalAction(){
+      return this.$store.getters.modalAction;
     }
   },
   methods: {
     removeNote(){
-      this.$store.commit('removeNote', this.index);
+      // if(this.modalAction){
+      //   console.log('index', this.index)
+      //   this.$store.commit('removeNote', this.index);
+      // }
+      console.log(this.index, this.noteItem)
     },
     selectNote(){
       this.$store.commit('setSelectedNote', this.index);
     },
     editNote(){
       this.$router.push(`notes/${this.index}/edit`);
+    },
+    openModal(){
+      this.$store.commit('setShowModal', true);
+    },
+    closeModal(){
+      this.$store.commit('setShowModal', false);
+      this.$store.commit('setModalAction', null);
     }
   }
 
 }
 </script>
+
 
 <style lang="scss">
   .note-item {
@@ -76,13 +98,11 @@ export default {
 
     &-selected{
       border-left: 7px solid #47c98f;
-      transform: scale(1.02);
-      box-shadow: 0 3px 6px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.24);
     }
 
-    &:hover {
+    &:hover, &-selected {
       transform: scale(1.02);
-      box-shadow: 0 3px 6px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.24);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.12), 0 4px 6px rgba(0,0,0,0.24);
     }
 
     &-header{
@@ -123,3 +143,5 @@ export default {
     margin: .9rem 0 .6rem;
   }
 </style>
+
+

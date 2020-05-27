@@ -10,11 +10,19 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
+    modalAction: null,
+    showModal: false,
     selectedNoteIndex: null,
     selectedTodoMode: 'all',
     notes: getData(APP_NAME)
   },
   getters: {
+    showModal(state){
+      return state.showModal;
+    },
+    modalAction(state) {
+      return state.modalAction;
+    },
     selectedNoteIndex(state){
       return state.selectedNoteIndex;
     },
@@ -93,6 +101,12 @@ export const store = new Vuex.Store({
     toggleCheckAllTodos(state, {index, checked}) {
       state.notes[index].todos = state.notes[index].todos.map(t => ({...t, completed: checked }));
       setData(APP_NAME, state.notes);
+    },
+    setShowModal(state, show){
+      state.showModal = show;
+    },
+    setModalAction(state, mode){
+      state.modalAction = mode;
     }
   }
 });

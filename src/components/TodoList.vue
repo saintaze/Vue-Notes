@@ -1,8 +1,5 @@
 <template>
   <div id="todo-list">
-
-    <modal-dialog :showModal="false"/>
-
     <div 
       class="todo-item" 
       :class="{'note-edit': !editNoteName, 'no-border': !todosFiltered.length}"
@@ -56,7 +53,6 @@ import TodoItemsRemaining from '@/components/TodoItemsRemaining';
 import TodoCheckAll from '@/components/TodoCheckAll';
 import TodoModes from '@/components/TodoModes';
 import TodoClearCompleted from '@/components/TodoClearCompleted';
-import ModalDialog from '@/components/ModalDialog';
 
 export default {
   name: 'todo-list',
@@ -65,8 +61,7 @@ export default {
     TodoCheckAll,
     TodoItemsRemaining,
     TodoModes,
-    TodoClearCompleted,
-    ModalDialog
+    TodoClearCompleted
   },
   data (){
     return {
