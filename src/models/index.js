@@ -1,6 +1,6 @@
 export class Note {
-  constructor(noteTitle) {
-    this.name = noteTitle;
+  constructor(noteName) {
+    this.name = noteName;
     this.todos = []
   }
 }

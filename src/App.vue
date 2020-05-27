@@ -1,30 +1,22 @@
 <template>
   <div id="app" class="container">
-    <div id="nav">
-      <button><router-link to="/notes">Notes</router-link></button> |
-      <button><router-link to="/notes/:id/edit">Notes Edit</router-link></button> 
+    <div class="nav">
+       <router-link to="/notes"><button>Notes</button> </router-link>
+       <img src="./assets/logo.png" alt="vue logo" class="logo">
     </div>
-    <img src="./assets/logo.png" alt="vue logo" class="logo">
     <router-view/>
   </div>
 </template>
 
 <script>
-import TodoList from '@/components/TodoList'
-
 export default {
-  name: 'app',
-  components: {
-    TodoList
-  }
+  name: 'app'
 }
 </script>
 
 <style lang="scss">
 
-// Montserrat Font
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
-
 
 * {
   box-sizing: border-box;
@@ -40,7 +32,7 @@ body {
   line-height: 1.6;
   font-weight: normal;
   font-size: 1.8rem;
-  padding-bottom: 4rem;
+  padding-bottom: 4.5rem;
 }
 
 .container {
@@ -50,13 +42,14 @@ body {
 
 .logo {
   display: block;
-  margin: 4rem auto;
+  margin: 0 auto;
   height: 7.5rem;
   cursor: pointer;
+  transition: all .5s ease;
 
   &:hover{
-    transition: all .5s ease;
-    transform: scale(1.1);
+    
+    transform: scale(1.2);
   }
 }
 
@@ -88,23 +81,47 @@ button {
     transition: all .3s;
     background-color: #41b883;
     border: 1px solid #20b2aab0;
-    color: white;
+    color: white !important;
 
     &:hover {
       background-color: #41b883;
     }
   }
 
-#nav {
-  padding: 30px;
+.nav {
+  display: flex;
+  margin: 4rem 0;
+  justify-content: space-between;
+  position: relative;
 
-  a {
-    font-weight: bold;
+  button {
+    font-weight: 500;
     color: #2c3e50;
 
-    &.router-link-exact-active {
-      color: #42b983;
+    &:hover {
+      transition: all .3s;
+      color : white;
+      background-color: rgb(23, 161, 161);
+      border: 1px solid rgb(23, 161, 161);
     }
   }
+
+  a {
+    position: absolute;
+    top: 2px;
+    left: 0;
+  }
+
+  .router-link-exact-active button {
+    transition: all .3s;
+    background-color: teal;
+    border: 1px solid rgb(23, 161, 161);
+    color: white !important;
+
+    &:hover {
+      background-color: rgb(23, 161, 161);
+    }
+  }
+
 }
 </style>
