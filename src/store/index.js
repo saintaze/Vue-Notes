@@ -10,6 +10,7 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
+    modalActiveItemIndex: null,
     modalAction: null,
     showModal: false,
     selectedNoteIndex: null,
@@ -22,6 +23,9 @@ export const store = new Vuex.Store({
     },
     modalAction(state) {
       return state.modalAction;
+    },
+    modalActiveItemIndex(state){
+      return state.modalActiveItemIndex;
     },
     selectedNoteIndex(state){
       return state.selectedNoteIndex;
@@ -107,6 +111,9 @@ export const store = new Vuex.Store({
     },
     setModalAction(state, mode){
       state.modalAction = mode;
+    },
+    setModalActiveItemIndex(state, index){
+      state.modalActiveItemIndex = index;
     }
   }
 });

@@ -3,10 +3,10 @@
     <div class="modal" @click="closeModal" v-if="showModal">
       <div class="modal-box" @click.stop>
         <div class="modal-header">
-          <h3>Are you Sure?</h3>
+          <h3>Confirm</h3>
         </div>
         <div class="modal-body">
-          I said hello to world not you
+          Are you sure you want to perform this action?
         </div>
         <div class="modal-footer">
           <button @click.stop="modalAction(true)" class="modal-action-yes">Yes</button>
@@ -24,7 +24,7 @@ export default {
   methods: {
     modalAction(action){
       this.$store.commit('setModalAction', action);
-      this.closeModal()
+      this.closeModal();
     },
     closeModal(){
       this.$store.commit('setShowModal', false);
@@ -46,35 +46,43 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.76);
+    background: rgba(0, 0, 0, 0.72);
     display: grid;
     place-items: center;
     z-index: 2;
-    transition: opacity .3s ease;
   
   &-box {
     background: #fff;
     width: 45rem;
     border-radius: 1px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.12), 0 4px 6px rgba(0,0,0,0.24);
-    transition: all .3s ease;
-    padding: 2rem 3rem;
-    background-color: aliceblue;
+    padding: 3rem;
+    background-color: whitesmoke;
   }
 
   &-header{
     h3{
       font-size: 1.9rem;
       font-weight: 600;
+      margin: 0;
+      line-height: 1.2;
+      position: relative;
+
+       &::after{
+        background-color: #536271;
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 8rem;
+        height: 2px;
+       }
     }
   }
   
   &-body{
     font-size: 1.7rem;
-  }
-
-  &-footer {
-    margin: 2.6rem 0 1.5rem;
+    margin: 3.3rem 0 3rem;
   }
 
   &-action-yes, &-action-no {
@@ -83,18 +91,19 @@ export default {
 
   &-action-yes {
     background-color: #aaf397;;
-    border: 1px solid #33ca33;
+    border: 1px solid #45c345;
     margin-right: .5rem;
     
     &:hover {
+      transition: all .2s;
       background-color: #c4f7b7;
       border: 1px solid #91ce82;
     }
   }
   
   &-action-no {
-    background-color: #f39797;
-    border: 1px solid #e84949b0;
+    background-color: #f4aaaa;;
+    border: 1px solid #fa6c6cb0;
     
     &:hover{
       transition: all .2s;

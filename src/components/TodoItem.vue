@@ -5,7 +5,7 @@
         class="todo-complete"
         type="checkbox" 
         v-model="todoItem.completed" 
-        @change="doneEdit"
+        @change="toggleCheck"
         v-if="this.selectedTodoMode === 'all'"
       >
       <div 
@@ -20,13 +20,13 @@
         class="todo-item-edit" 
         type="text" 
         v-model="todoItem.title" 
-        @keyup.enter="doneEdit"
-        @keyup.esc="cancelEdit"
+        @keyup.enter="shouldEdit"
+        @keyup.esc="shouldCancelEdit"
       >
     </div>
     <div class="todo-item-right" :style="{visibility: toggleHideShowEl()}">
       <i class="fas fa-pen todo-item-icon" @click="editTodo"></i>
-      <i class="fas fa-times todo-item-icon" @click="removeTodo"></i>
+      <i class="fas fa-times todo-item-icon" @click="openModal('removeTodo')"></i>
     </div>
   </div>
 </template>
@@ -43,17 +43,33 @@ export default {
   data(){
     return {
       todoItem: {...this.todo},
-      cachedTitle: ''
+      cachedTitle: '',
+      modalTask: ''
     }
   },
   watch: {
     todo(){
       this.todoItem = {...this.todo}
+    },
+    modalAction(){
+      console.log(this.modalAction, this.modalActiveItemIndex)
+      if(this.modalActiveItemIndex === this.todoIndex){
+        if(this.modalTask === 'removeTodo') this.removeTodo();
+        if(this.modalTask === 'doneEdit') this.doneEdit();
+        if(this.modalTask === 'doneCancelEdit') this.doneCancelEdit();
+        this.resetModalVals();
+      }
     }
   },
   computed: {
     selectedTodoMode(){
       return this.$store.getters.selectedTodoMode;
+    },
+    modalAction(){
+      return this.$store.getters.modalAction;
+    },
+    modalActiveItemIndex(){
+      return this.$store.getters.modalActiveItemIndex;
     }
   },
   methods: {
@@ -61,27 +77,66 @@ export default {
       this.todoItem.editing = true;
       this.cachedTitle = this.todoItem.title;
     },
-    doneEdit(){
+    shouldEdit(){
       if(!this.todoItem.title.trim().length){
         this.todoItem.title = this.cachedTitle;
+        return 
+      }
+      if(this.todoItem.title === this.cachedTitle){
+        this.todoItem.editing = false;
         return;
       }
-      this.todoItem.editing = false;
+      console.log('shoudl edit')
+      this.openModal('doneEdit');
+    },
+    doneEdit(){   
+      console.log('doneedit')
+      if(this.modalAction){
+        this.todoItem.editing = false;
+        this.$store.commit('editTodo', {
+          noteIndex: this.noteIndex, 
+          todoIndex: this.todoIndex, 
+          todo: this.todoItem
+        });
+      }
+    },
+    shouldCancelEdit(){
+      if(!this.todoItem.title.trim().length || this.todoItem.title === this.cachedTitle){
+        this.todoItem.title = this.cachedTitle;
+        this.todoItem.editing = false;
+        return;
+      }
+      this.openModal('doneCancelEdit');
+    },
+    doneCancelEdit(){
+      if(this.modalAction){
+        this.todoItem.title = this.cachedTitle;
+        this.todoItem.editing = false;
+      }
+    },
+    toggleCheck(){
       this.$store.commit('editTodo', {
         noteIndex: this.noteIndex, 
         todoIndex: this.todoIndex, 
         todo: this.todoItem
       });
-    },
-    cancelEdit(){
-      this.todoItem.title = this.cachedTitle;
-      this.todoItem.editing = false;
-    },
+    },  
     removeTodo(){
-      this.$store.commit('removeTodo', {noteIndex: this.noteIndex, todoIndex: this.todoIndex});
+      if(this.modalAction){
+        this.$store.commit('removeTodo', {noteIndex: this.noteIndex, todoIndex: this.todoIndex});
+      }
     },
     toggleHideShowEl(){
-      return  this.selectedTodoMode === 'all' ? 'visible': 'hidden';
+      return this.selectedTodoMode === 'all' ? 'visible': 'hidden';
+    },
+    openModal(task){
+      this.modalTask = task
+      this.$store.commit('setShowModal', true);
+      this.$store.commit('setModalActiveItemIndex', this.todoIndex);
+    },
+    resetModalVals(){
+      this.$store.commit('setModalAction', null);
+      this.$store.commit('setModalActiveItemIndex', null);
     }
   }
 }
@@ -91,7 +146,7 @@ export default {
 
   .todo-item {
     font-size: 1.7rem;
-    margin-bottom: .5rem;
+    margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;

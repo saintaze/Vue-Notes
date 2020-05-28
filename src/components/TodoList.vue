@@ -16,8 +16,8 @@
           class="todo-item-edit" 
           type="text" 
           v-model="note.name" 
-          @keyup.enter="doneEdit"
-          @keyup.esc="cancelEdit"
+          @keyup.enter="shouldEdit"
+          @keyup.esc="shouldCancelEdit"
         >
       </div>
       <div class="todo-item-right">
@@ -67,7 +67,17 @@ export default {
     return {
       editNoteName: false,
       cachedName: '',
-      noteIndex: +this.$route.params.id
+      noteIndex: +this.$route.params.id,
+      modalTask: ''
+    }
+  },
+  watch: {
+    modalAction(){
+      if(this.modalActiveItemIndex === this.noteIndex){
+        if(this.modalTask === 'doneEdit') this.doneEdit();
+        if(this.modalTask === 'doneCancelEdit') this.doneCancelEdit();
+        this.resetModalVals();
+      }
     }
   },
   computed: {
@@ -79,6 +89,12 @@ export default {
     },
     selectedTodoMode(){
       return this.$store.getters.selectedTodoMode;
+    },
+    modalAction(){
+      return this.$store.getters.modalAction;
+    },
+    modalActiveItemIndex(){
+      return this.$store.getters.modalActiveItemIndex;
     }
   },
   methods: {
@@ -86,13 +102,36 @@ export default {
       this.editNoteName = true;
       this.cachedName = this.note.name;
     },
-     doneEdit(){
+    shouldEdit(){
       if(!this.note.name.trim().length){
         this.note.name = this.cachedName;
+        return 
+      }
+      if(this.note.name === this.cachedName){
+        this.editNoteName = false;
         return;
       }
-      this.editNoteName = false;
-      this.$store.commit('editNoteName', {index: this.noteIndex, name: this.note.name});
+      this.openModal('doneEdit');
+    },
+    doneEdit(){   
+      if(this.modalAction){
+        this.editNoteName = false;
+        this.$store.commit('editNoteName', {index: this.noteIndex, name: this.note.name});
+      }
+    },
+    shouldCancelEdit(){
+      if(!this.note.name.trim().length || this.note.name === this.cachedName){
+        this.note.name = this.cachedName;
+        this.editNoteName = false;
+        return;
+      }
+      this.openModal('doneCancelEdit');
+    },
+    doneCancelEdit(){
+      if(this.modalAction){
+        this.note.name = this.cachedName;
+        this.editNoteName = false;
+      }
     },
     cancelEdit(){
       this.note.name = this.cachedName;
@@ -100,6 +139,15 @@ export default {
     },
     toggleHideShowEl(){
       return this.selectedTodoMode === 'all' ? 'visible': 'hidden';
+    },
+    openModal(task){
+      this.modalTask = task
+      this.$store.commit('setShowModal', true);
+      this.$store.commit('setModalActiveItemIndex', this.noteIndex);
+    },
+    resetModalVals(){
+      this.$store.commit('setModalAction', null);
+      this.$store.commit('setModalActiveItemIndex', null);
     }
   }
 }
@@ -139,13 +187,13 @@ export default {
     margin-bottom: 1.4rem;
 
     &:last-child {
-      padding-top: 2.5rem;
+      padding-top: 2.7rem;
     }
   }
 
   .fade {
     &-enter-active, &-leave-active {
-      transition: opacity .2s;
+      transition: opacity .2s ease-in-out;
     }
 
     &-enter, &-leave-to{

@@ -43,11 +43,11 @@ export default {
     note(){
       this.noteItem = {...this.note}
     },
-    modalAction(newVal, oldVal){
-      console.log(newVal, oldVal)
-      console.log(this.modalAction)
-      this.removeNote(this.index);
-      this.closeModal();
+    modalAction(){
+      if(this.modalActiveItemIndex === this.index){
+        this.removeNote();
+        this.resetModalVals();
+      }
     }
   },
   computed: {
@@ -56,15 +56,16 @@ export default {
     },
     modalAction(){
       return this.$store.getters.modalAction;
+    },
+    modalActiveItemIndex(){
+      return this.$store.getters.modalActiveItemIndex;
     }
   },
   methods: {
     removeNote(){
-      // if(this.modalAction){
-      //   console.log('index', this.index)
-      //   this.$store.commit('removeNote', this.index);
-      // }
-      console.log(this.index, this.noteItem)
+      if(this.modalAction){
+        this.$store.commit('removeNote', this.index);
+      }
     },
     selectNote(){
       this.$store.commit('setSelectedNote', this.index);
@@ -74,10 +75,11 @@ export default {
     },
     openModal(){
       this.$store.commit('setShowModal', true);
+      this.$store.commit('setModalActiveItemIndex', this.index);
     },
-    closeModal(){
-      this.$store.commit('setShowModal', false);
+    resetModalVals(){
       this.$store.commit('setModalAction', null);
+      this.$store.commit('setModalActiveItemIndex', null);
     }
   }
 
