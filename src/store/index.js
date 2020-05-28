@@ -64,7 +64,6 @@ export const store = new Vuex.Store({
   },
   mutations: {
     addNote(state, newNoteName) {
-      // if (!newNoteName.trim().length) return;
       state.notes.unshift(new Note(newNoteName));
       state.selectedNoteIndex = 0;
       setData(APP_NAME, state.notes);
@@ -86,7 +85,6 @@ export const store = new Vuex.Store({
       state.selectedNoteIndex = index;
     },
     addTodo(state, newTodoTitle) {
-      // if (!newTodoTitle.trim().length) return;
       const newTodo = new Todo(newTodoTitle);
       state.notes[state.selectedNoteIndex].todos.unshift(newTodo);
       setData(APP_NAME, state.notes);

@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Notes from '../views/Notes.vue';
-import NotesEdit from '../views/NotesEdit.vue';
+
+import Notes from '@/views/Notes';
+import NotesEdit from '@/views/NotesEdit';
 
 Vue.use(VueRouter);
 
@@ -18,8 +19,7 @@ const routes = [
   {
     path: '/notes/:id/edit',
     name: 'notes-edit',
-    component: NotesEdit,
-    props: true
+    component: NotesEdit
   }
 ]
 

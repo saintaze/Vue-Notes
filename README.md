@@ -1,19 +1,30 @@
-# booho
+# Vue-Notes
+A note and todos app built with Vue.
 
-## Project setup
-```
-yarn install
-```
+### Features
++ Clean design
++ Custom modal implementation
++ CRUD functionality for Notes and Todos
++ Todos different display modes
++ 2 page design
++ Local Storage to persist data
++ VueX used as app store and state management
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+##### Built With
++ HTML5
++ CSS3
++ Vue
++ VueX
 
-### Compiles and minifies for production
-```
-yarn build
-```
+### Getting Started
+clone repo
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+`cd` into folder and run `yarn install`
+
+run `yarn serve`
+
+# Live Version
+#### URL: [Start taking notes with Vue](https://vue-notes.now.sh/)
+
+# Author
+Saintaze [@saintaze](https://github.com/saintaze/)
