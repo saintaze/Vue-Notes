@@ -21,6 +21,11 @@
 
 export default {
   name: 'modal-dialog',
+  computed: {
+    showModal() {
+      return this.$store.getters.showModal;
+    }
+  },
   methods: {
     modalAction(action){
       this.$store.commit('setModalAction', action);
@@ -28,11 +33,6 @@ export default {
     },
     closeModal(){
       this.$store.commit('setShowModal', false);
-    }
-  },
-  computed: {
-    showModal() {
-      return this.$store.getters.showModal;
     }
   }
 }

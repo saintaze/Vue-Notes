@@ -26,8 +26,6 @@
 </template>
 
 <script>
-
-
 export default {
   name: 'note-item',
   props: {

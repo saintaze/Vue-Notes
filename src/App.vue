@@ -1,9 +1,9 @@
 <template>
   <div id="app" class="container">
-    <modal-dialog></modal-dialog>
+    <modal-dialog />
     <div class="nav">
-       <router-link to="/notes"><button>Notes</button> </router-link>
-       <img src="./assets/logo.png" alt="vue logo" class="logo">
+       <router-link to="/notes"><button>Notes</button></router-link>
+       <img src="./assets/logo.png" alt="Vue Logo" class="logo">
     </div>
     <router-view/>
   </div>
@@ -21,7 +21,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
 * {
@@ -54,7 +53,6 @@ body {
   transition: all .5s ease;
 
   &:hover{
-    
     transform: scale(1.2);
   }
 }
@@ -83,16 +81,16 @@ button {
   }
 }
 
- .active {
-    transition: all .3s;
-    background-color: #41b883;
-    border: 1px solid #20b2aab0;
-    color: white !important;
+.active {
+  transition: all .3s;
+  background-color: #41b883;
+  border: 1px solid #20b2aab0;
+  color: white !important;
 
-    &:hover {
-      background-color: #41b883;
-    }
+  &:hover {
+    background-color: #41b883;
   }
+}
 
 .nav {
   display: flex;

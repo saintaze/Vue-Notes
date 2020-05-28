@@ -10,7 +10,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'todo-clear-completed',
   props: {
@@ -26,7 +25,7 @@ export default {
   },
   computed: {
     showClearCompletedButton(){
-      return this.$store.getters.showClearCompletedButton(this.noteIndex)
+      return this.$store.getters.showClearCompletedButton(this.noteIndex);
     },
     modalAction(){
       return this.$store.getters.modalAction;
@@ -53,7 +52,6 @@ export default {
     },
     resetModalVals(){
       this.$store.commit('setModalAction', null);
-      this.$store.commit('setModalActiveItemIndex', null);
     }
   }
 }

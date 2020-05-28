@@ -17,15 +17,15 @@ export default {
   props:{
     noteIndex: Number
   },
-  methods: {
-    toggleCheckAllTodos(e){
-      this.$store.commit('toggleCheckAllTodos', {index: this.noteIndex, checked: e.target.checked});
-    }
-  },
   computed: {
     noRemainingTodos(){
       return this.$store.getters.noRemainingTodos(this.noteIndex);
     },
+  },
+  methods: {
+    toggleCheckAllTodos(e){
+      this.$store.commit('toggleCheckAllTodos', {index: this.noteIndex, checked: e.target.checked});
+    }
   }
 }
 </script>

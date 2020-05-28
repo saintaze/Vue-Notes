@@ -11,8 +11,6 @@
 
 <script>
 
-import { dispatchEvent } from '@/helpers';
-
 export default {
   name: 'input-box',
   props: {
@@ -27,7 +25,7 @@ export default {
   methods: {
     addItem(){
       if (!this.inputValue.trim().length) return;
-      this.$store.commit(this.eventName, this.inputValue)
+      this.$store.commit(this.eventName, this.inputValue);
       this.inputValue = '';
       this.$emit('focus');
     }

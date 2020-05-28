@@ -32,7 +32,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'todo-item',
   props: {
@@ -88,11 +87,9 @@ export default {
         this.todoItem.editing = false;
         return;
       }
-      console.log('shoudl edit')
       this.openModal('doneEdit');
     },
     doneEdit(){   
-      console.log('doneedit')
       if(this.modalAction){
         this.todoItem.editing = false;
         this.$store.commit('editTodo', {

@@ -47,7 +47,6 @@
 </template>
 
 <script>
-
 import TodoItem from '@/components/TodoItem';
 import TodoItemsRemaining from '@/components/TodoItemsRemaining';
 import TodoCheckAll from '@/components/TodoCheckAll';
@@ -73,7 +72,6 @@ export default {
   },
   watch: {
     modalAction(){
-      console.log('todolist')
       if(this.modalActivatingComponent === 'todoList' && this.modalActiveItemIndex === this.noteIndex){
         if(this.modalTask === 'doneEdit') this.doneEdit();
         if(this.modalTask === 'doneCancelEdit') this.doneCancelEdit();
@@ -125,17 +123,13 @@ export default {
     },
     shouldCancelEdit(){
       if(!this.note.name.trim().length || this.note.name === this.cachedName){
-        this.note.name = this.cachedName;
-        this.editNoteName = false;
+        this.cancelEdit();
         return;
       }
       this.openModal('doneCancelEdit');
     },
     doneCancelEdit(){
-      if(this.modalAction){
-        this.note.name = this.cachedName;
-        this.editNoteName = false;
-      }
+      if(this.modalAction) this.cancelEdit();
     },
     cancelEdit(){
       this.note.name = this.cachedName;
@@ -205,6 +199,7 @@ export default {
       opacity: 0;
     } 
   }
+
   h4 {
     margin: 0
   }
