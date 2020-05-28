@@ -10,6 +10,7 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
+    modalActivatingComponent: '',
     modalActiveItemIndex: null,
     modalAction: null,
     showModal: false,
@@ -26,6 +27,9 @@ export const store = new Vuex.Store({
     },
     modalActiveItemIndex(state){
       return state.modalActiveItemIndex;
+    },
+    modalActivatingComponent(state){
+      return state.modalActivatingComponent;
     },
     selectedNoteIndex(state){
       return state.selectedNoteIndex;
@@ -60,7 +64,7 @@ export const store = new Vuex.Store({
   },
   mutations: {
     addNote(state, newNoteName) {
-      if (!newNoteName.trim().length) return;
+      // if (!newNoteName.trim().length) return;
       state.notes.unshift(new Note(newNoteName));
       state.selectedNoteIndex = 0;
       setData(APP_NAME, state.notes);
@@ -82,7 +86,7 @@ export const store = new Vuex.Store({
       state.selectedNoteIndex = index;
     },
     addTodo(state, newTodoTitle) {
-      if (!newTodoTitle.trim().length) return;
+      // if (!newTodoTitle.trim().length) return;
       const newTodo = new Todo(newTodoTitle);
       state.notes[state.selectedNoteIndex].todos.unshift(newTodo);
       setData(APP_NAME, state.notes);
@@ -114,6 +118,9 @@ export const store = new Vuex.Store({
     },
     setModalActiveItemIndex(state, index){
       state.modalActiveItemIndex = index;
+    },
+    setModalActivatingComponent(state, component){
+      state.modalActivatingComponent = component;
     }
   }
 });

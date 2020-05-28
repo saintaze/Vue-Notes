@@ -26,6 +26,7 @@ export default {
   },
   methods: {
     addItem(){
+      if (!this.inputValue.trim().length) return;
       this.$store.commit(this.eventName, this.inputValue)
       this.inputValue = '';
       this.$emit('focus');

@@ -73,7 +73,8 @@ export default {
   },
   watch: {
     modalAction(){
-      if(this.modalActiveItemIndex === this.noteIndex){
+      console.log('todolist')
+      if(this.modalActivatingComponent === 'todoList' && this.modalActiveItemIndex === this.noteIndex){
         if(this.modalTask === 'doneEdit') this.doneEdit();
         if(this.modalTask === 'doneCancelEdit') this.doneCancelEdit();
         this.resetModalVals();
@@ -95,6 +96,9 @@ export default {
     },
     modalActiveItemIndex(){
       return this.$store.getters.modalActiveItemIndex;
+    },
+    modalActivatingComponent(){
+      return this.$store.getters.modalActivatingComponent;
     }
   },
   methods: {
@@ -142,6 +146,7 @@ export default {
     },
     openModal(task){
       this.modalTask = task
+      this.$store.commit('setModalActivatingComponent', 'todoList');
       this.$store.commit('setShowModal', true);
       this.$store.commit('setModalActiveItemIndex', this.noteIndex);
     },

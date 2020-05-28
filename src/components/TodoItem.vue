@@ -52,8 +52,7 @@ export default {
       this.todoItem = {...this.todo}
     },
     modalAction(){
-      console.log(this.modalAction, this.modalActiveItemIndex)
-      if(this.modalActiveItemIndex === this.todoIndex){
+      if(this.modalActivatingComponent === 'todoItem' && this.modalActiveItemIndex === this.todoIndex){
         if(this.modalTask === 'removeTodo') this.removeTodo();
         if(this.modalTask === 'doneEdit') this.doneEdit();
         if(this.modalTask === 'doneCancelEdit') this.doneCancelEdit();
@@ -70,6 +69,9 @@ export default {
     },
     modalActiveItemIndex(){
       return this.$store.getters.modalActiveItemIndex;
+    },
+    modalActivatingComponent(){
+      return this.$store.getters.modalActivatingComponent;
     }
   },
   methods: {
@@ -130,7 +132,8 @@ export default {
       return this.selectedTodoMode === 'all' ? 'visible': 'hidden';
     },
     openModal(task){
-      this.modalTask = task
+      this.modalTask = task;
+      this.$store.commit('setModalActivatingComponent', 'todoItem');
       this.$store.commit('setShowModal', true);
       this.$store.commit('setModalActiveItemIndex', this.todoIndex);
     },
@@ -145,7 +148,7 @@ export default {
 <style lang="scss">
 
   .todo-item {
-    font-size: 1.7rem;
+    font-size: 1.6rem;
     margin-bottom: 1.5rem;
     display: flex;
     align-items: center;

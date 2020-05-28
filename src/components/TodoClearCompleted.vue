@@ -18,8 +18,10 @@ export default {
   },
   watch: {
     modalAction(){
-      this.clearCompleted();
-      this.resetModalVals();
+      if(this.modalActivatingComponent === 'clearCompleted'){
+        this.clearCompleted();
+        this.resetModalVals();
+      }
     }
   },
   computed: {
@@ -31,6 +33,9 @@ export default {
     },
     modalActiveItemIndex(){
       return this.$store.getters.modalActiveItemIndex;
+    },
+    modalActivatingComponent(){
+      return this.$store.getters.modalActivatingComponent;
     }
   },
   methods: {
@@ -43,6 +48,7 @@ export default {
       }
     },
     openModal(){
+      this.$store.commit('setModalActivatingComponent', 'clearCompleted');
       this.$store.commit('setShowModal', true);
     },
     resetModalVals(){

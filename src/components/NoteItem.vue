@@ -44,7 +44,7 @@ export default {
       this.noteItem = {...this.note}
     },
     modalAction(){
-      if(this.modalActiveItemIndex === this.index){
+      if(this.modalActivatingComponent === 'noteItem' && this.modalActiveItemIndex === this.index){
         this.removeNote();
         this.resetModalVals();
       }
@@ -59,6 +59,9 @@ export default {
     },
     modalActiveItemIndex(){
       return this.$store.getters.modalActiveItemIndex;
+    },
+    modalActivatingComponent(){
+      return this.$store.getters.modalActivatingComponent;
     }
   },
   methods: {
@@ -74,6 +77,7 @@ export default {
       this.$router.push(`notes/${this.index}/edit`);
     },
     openModal(){
+      this.$store.commit('setModalActivatingComponent', 'noteItem');
       this.$store.commit('setShowModal', true);
       this.$store.commit('setModalActiveItemIndex', this.index);
     },
