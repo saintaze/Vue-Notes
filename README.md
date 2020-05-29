@@ -1,5 +1,5 @@
 # Vue-Notes
-A note and todos app built with Vue.
+A notes and todos app built with Vue.
 
 ### Features
 + Clean design
@@ -24,7 +24,7 @@ clone repo
 run `yarn serve`
 
 # Live Version
-#### URL: [Start taking notes with Vue](https://vue-notes.now.sh/)
+#### URL: [Start taking notes with Vue](https://vue-notes.ayezahmed.now.sh/)
 
 # Author
 Saintaze [@saintaze](https://github.com/saintaze/)
