@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import {openModal, resetModalVals} from '@/helpers';
+
 export default {
   name: 'todo-clear-completed',
   props: {
@@ -19,7 +21,7 @@ export default {
     modalAction(){
       if(this.modalActivatingComponent === 'clearCompleted'){
         this.clearCompleted();
-        this.resetModalVals();
+        resetModalVals(this);
       }
     }
   },
@@ -39,19 +41,12 @@ export default {
   },
   methods: {
     shouldClearCompleted(){
-      this.openModal();
+      openModal(this, 'clearCompleted', null, this.noteIndex);
     },
     clearCompleted(){
       if(this.modalAction){
         this.$store.commit('clearCompletedTodos', this.noteIndex);
       }
-    },
-    openModal(){
-      this.$store.commit('setModalActivatingComponent', 'clearCompleted');
-      this.$store.commit('setShowModal', true);
-    },
-    resetModalVals(){
-      this.$store.commit('setModalAction', null);
     }
   }
 }

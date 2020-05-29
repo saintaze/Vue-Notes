@@ -21,7 +21,7 @@
         >
       </div>
       <div class="todo-item-right">
-        <i class="fas fa-pen todo-item-icon" @click="setEditNoteName"></i>
+        <i class="fas fa-pen todo-item-icon" @click="startEditing"></i>
       </div>
     </div>
 
@@ -53,6 +53,8 @@ import TodoCheckAll from '@/components/TodoCheckAll';
 import TodoModes from '@/components/TodoModes';
 import TodoClearCompleted from '@/components/TodoClearCompleted';
 
+import {openModal, resetModalVals} from '@/helpers';
+
 export default {
   name: 'todo-list',
   components: {
@@ -75,7 +77,7 @@ export default {
       if(this.modalActivatingComponent === 'todoList' && this.modalActiveItemIndex === this.noteIndex){
         if(this.modalTask === 'doneEdit') this.doneEdit();
         if(this.modalTask === 'doneCancelEdit') this.doneCancelEdit();
-        this.resetModalVals();
+        resetModalVals(this, true);
       }
     }
   },
@@ -100,7 +102,7 @@ export default {
     }
   },
   methods: {
-     setEditNoteName(){
+     startEditing(){
       this.editNoteName = true;
       this.cachedName = this.note.name;
     },
@@ -113,7 +115,7 @@ export default {
         this.editNoteName = false;
         return;
       }
-      this.openModal('doneEdit');
+      openModal(this, 'todoList', 'doneEdit', this.noteIndex)
     },
     doneEdit(){   
       if(this.modalAction){
@@ -126,7 +128,8 @@ export default {
         this.cancelEdit();
         return;
       }
-      this.openModal('doneCancelEdit');
+      openModal(this, 'todoList', 'doneCancelEdit', this.noteIndex)
+
     },
     doneCancelEdit(){
       if(this.modalAction) this.cancelEdit();
@@ -137,16 +140,6 @@ export default {
     },
     toggleHideShowEl(){
       return this.selectedTodoMode === 'all' ? 'visible': 'hidden';
-    },
-    openModal(task){
-      this.modalTask = task
-      this.$store.commit('setModalActivatingComponent', 'todoList');
-      this.$store.commit('setShowModal', true);
-      this.$store.commit('setModalActiveItemIndex', this.noteIndex);
-    },
-    resetModalVals(){
-      this.$store.commit('setModalAction', null);
-      this.$store.commit('setModalActiveItemIndex', null);
     }
   }
 }

@@ -56,7 +56,8 @@ export const store = new Vuex.Store({
       return state.notes[index].todos.filter(t => !t.completed).length;
     },
     noRemainingTodos: (state) => (index) => {
-      return state.notes[index].todos.every(t => t.completed);
+      const todos = state.notes[index].todos;
+      return todos.length && todos.every(t => t.completed);
     },
     showClearCompletedButton: (state) => (index) => {
       return state.notes[index].todos.filter(t => t.completed).length > 0;

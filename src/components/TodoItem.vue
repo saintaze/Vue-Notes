@@ -25,13 +25,15 @@
       >
     </div>
     <div class="todo-item-right" :style="{visibility: toggleHideShowEl()}">
-      <i class="fas fa-pen todo-item-icon" @click="editTodo"></i>
-      <i class="fas fa-times todo-item-icon" @click="openModal('removeTodo')"></i>
+      <i class="fas fa-pen todo-item-icon" @click="startEditing"></i>
+      <i class="fas fa-times todo-item-icon" @click="shouldRemoveTodo"></i>
     </div>
   </div>
 </template>
 
 <script>
+import {openModal, resetModalVals} from '@/helpers';
+
 export default {
   name: 'todo-item',
   props: {
@@ -55,7 +57,7 @@ export default {
         if(this.modalTask === 'removeTodo') this.removeTodo();
         if(this.modalTask === 'doneEdit') this.doneEdit();
         if(this.modalTask === 'doneCancelEdit') this.doneCancelEdit();
-        this.resetModalVals();
+        resetModalVals(this, true);
       }
     }
   },
@@ -74,7 +76,7 @@ export default {
     }
   },
   methods: {
-    editTodo(){
+    startEditing(){
       this.todoItem.editing = true;
       this.cachedTitle = this.todoItem.title;
     },
@@ -87,16 +89,19 @@ export default {
         this.todoItem.editing = false;
         return;
       }
-      this.openModal('doneEdit');
+      openModal(this, 'todoItem', 'doneEdit', this.todoIndex);
+    },
+    editTodo(){
+      this.$store.commit('editTodo', {
+        noteIndex: this.noteIndex, 
+        todoIndex: this.todoIndex, 
+        todo: this.todoItem
+      });
     },
     doneEdit(){   
       if(this.modalAction){
         this.todoItem.editing = false;
-        this.$store.commit('editTodo', {
-          noteIndex: this.noteIndex, 
-          todoIndex: this.todoIndex, 
-          todo: this.todoItem
-        });
+        this.editTodo();
       }
     },
     shouldCancelEdit(){
@@ -105,7 +110,7 @@ export default {
         this.todoItem.editing = false;
         return;
       }
-      this.openModal('doneCancelEdit');
+      openModal(this, 'todoItem', 'doneCancelEdit', this.todoIndex);
     },
     doneCancelEdit(){
       if(this.modalAction){
@@ -113,33 +118,22 @@ export default {
         this.todoItem.editing = false;
       }
     },
-    toggleCheck(){
-      this.$store.commit('editTodo', {
-        noteIndex: this.noteIndex, 
-        todoIndex: this.todoIndex, 
-        todo: this.todoItem
-      });
-    },  
+    shouldRemoveTodo(){
+      openModal(this, 'todoItem', 'removeTodo', this.todoIndex);
+    },
     removeTodo(){
       if(this.modalAction){
         this.$store.commit('removeTodo', {noteIndex: this.noteIndex, todoIndex: this.todoIndex});
       }
     },
+    toggleCheck(){
+      this.editTodo();
+    },  
     toggleHideShowEl(){
       return this.selectedTodoMode === 'all' ? 'visible': 'hidden';
-    },
-    openModal(task){
-      this.modalTask = task;
-      this.$store.commit('setModalActivatingComponent', 'todoItem');
-      this.$store.commit('setShowModal', true);
-      this.$store.commit('setModalActiveItemIndex', this.todoIndex);
-    },
-    resetModalVals(){
-      this.$store.commit('setModalAction', null);
-      this.$store.commit('setModalActiveItemIndex', null);
     }
   }
-}
+} 
 </script>
 
 <style lang="scss">

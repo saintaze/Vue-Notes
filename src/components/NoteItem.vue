@@ -8,7 +8,7 @@
       <h4>{{noteItem.name}}</h4>
       <div class="todo-item-right note-item-right">
         <i class="fas fa-pen todo-item-icon" @click.stop="editNote"></i>
-        <i class="fas fa-times todo-item-icon" @click.stop="openModal"></i>
+        <i class="fas fa-times todo-item-icon" @click.stop="shouldRemove"></i>
       </div>
     </div>
     <div 
@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import {openModal, resetModalVals} from '@/helpers';
+
 export default {
   name: 'note-item',
   props: {
@@ -44,7 +46,7 @@ export default {
     modalAction(){
       if(this.modalActivatingComponent === 'noteItem' && this.modalActiveItemIndex === this.index){
         this.removeNote();
-        this.resetModalVals();
+        resetModalVals(this, true);
       }
     }
   },
@@ -63,6 +65,9 @@ export default {
     }
   },
   methods: {
+    shouldRemove(){
+      openModal(this, 'noteItem', null, this.index)
+    },
     removeNote(){
       if(this.modalAction){
         this.$store.commit('removeNote', this.index);
@@ -73,15 +78,6 @@ export default {
     },
     editNote(){
       this.$router.push(`notes/${this.index}/edit`);
-    },
-    openModal(){
-      this.$store.commit('setModalActivatingComponent', 'noteItem');
-      this.$store.commit('setShowModal', true);
-      this.$store.commit('setModalActiveItemIndex', this.index);
-    },
-    resetModalVals(){
-      this.$store.commit('setModalAction', null);
-      this.$store.commit('setModalActiveItemIndex', null);
     }
   }
 
