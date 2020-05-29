@@ -37,7 +37,7 @@ body {
   line-height: 1.6;
   font-weight: normal;
   font-size: 1.8rem;
-  padding-bottom: 4.5rem;
+  padding: 0 1rem 4.5rem;
 }
 
 .container {
@@ -126,6 +126,29 @@ button {
       background-color: rgb(23, 161, 161);
     }
   }
-
 }
+
+  @media screen and (max-width: 1100px){
+    html {
+      font-size: 60%;
+    }
+  }
+
+  @media screen and (max-width: 900px){
+    html {
+      font-size: 59%;
+    }
+  }
+
+  @media screen and (max-width: 700px){
+    html {
+      font-size: 56%;
+    }
+  }
+
+  @media screen and (max-width: 500px){
+    html {
+      font-size: 53%;
+    }
+  }
 </style>
