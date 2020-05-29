@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import {openModal, resetModalVals} from '@/helpers';
+import {openModal, closeModal} from '@/helpers';
 
 export default {
   name: 'todo-item',
@@ -57,7 +57,7 @@ export default {
         if(this.modalTask === 'removeTodo') this.removeTodo();
         if(this.modalTask === 'doneEdit') this.doneEdit();
         if(this.modalTask === 'doneCancelEdit') this.doneCancelEdit();
-        resetModalVals(this, true);
+        closeModal(this);
       }
     }
   },

@@ -53,7 +53,7 @@ import TodoCheckAll from '@/components/TodoCheckAll';
 import TodoModes from '@/components/TodoModes';
 import TodoClearCompleted from '@/components/TodoClearCompleted';
 
-import {openModal, resetModalVals} from '@/helpers';
+import {openModal, closeModal} from '@/helpers';
 
 export default {
   name: 'todo-list',
@@ -77,7 +77,7 @@ export default {
       if(this.modalActivatingComponent === 'todoList' && this.modalActiveItemIndex === this.noteIndex){
         if(this.modalTask === 'doneEdit') this.doneEdit();
         if(this.modalTask === 'doneCancelEdit') this.doneCancelEdit();
-        resetModalVals(this, true);
+        closeModal(this);
       }
     }
   },

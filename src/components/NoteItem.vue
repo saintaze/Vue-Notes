@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import {openModal, resetModalVals} from '@/helpers';
+import {openModal, closeModal} from '@/helpers';
 
 export default {
   name: 'note-item',
@@ -46,7 +46,7 @@ export default {
     modalAction(){
       if(this.modalActivatingComponent === 'noteItem' && this.modalActiveItemIndex === this.index){
         this.removeNote();
-        resetModalVals(this, true);
+        closeModal(this);
       }
     }
   },

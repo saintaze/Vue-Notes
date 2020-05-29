@@ -18,7 +18,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'modal-dialog',
   computed: {
@@ -29,7 +28,6 @@ export default {
   methods: {
     modalAction(action){
       this.$store.commit('setModalAction', action);
-      this.closeModal();
     },
     closeModal(){
       this.$store.commit('setShowModal', false);

@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import {openModal, resetModalVals} from '@/helpers';
+import {openModal, closeModal} from '@/helpers';
 
 export default {
   name: 'todo-clear-completed',
@@ -21,7 +21,7 @@ export default {
     modalAction(){
       if(this.modalActivatingComponent === 'clearCompleted'){
         this.clearCompleted();
-        resetModalVals(this);
+        closeModal(this);
       }
     }
   },
