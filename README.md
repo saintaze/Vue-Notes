@@ -1,5 +1,5 @@
 # Vue-Notes
-A note and todos app built with Vue.
+A notes and todos app built with Vue.
 
 ### Features
 + Clean design
